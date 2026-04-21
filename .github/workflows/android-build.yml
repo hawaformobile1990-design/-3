@@ -22,6 +22,9 @@ jobs:
       - name: Install pnpm
         run: npm install -g pnpm
 
+      - name: Install EAS CLI
+        run: npm install -g eas-cli
+
       # 4. تثبيت dependencies
       - name: Install dependencies
         run: pnpm install
