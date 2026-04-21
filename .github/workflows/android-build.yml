@@ -1,43 +1,56 @@
 name: Build Android APK
+
 on:
   push:
-    branches: [ main, master ]
-  workflow_dispatch:
+    branches: [ main ]
 
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
+      # 1. سحب المشروع
       - uses: actions/checkout@v4
 
-      - name: Setup Node.js
+      # 2. تثبيت Node
+      - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: 'pnpm'
 
+      # 3. تثبيت pnpm
       - name: Install pnpm
-        uses: pnpm/action-setup@v3
-        with:
-          version: 9
+        run: npm install -g pnpm
 
-      - name: Setup Java
-        uses: actions/setup-java@v4
-        with:
-          distribution: 'zulu'
-          java-version: '17'
-
+      # 4. تثبيت dependencies
       - name: Install dependencies
         run: pnpm install
 
+      # 5. بناء كود الواجهة (مهم!)
+      - name: Build Web
+        run: pnpm build
+
+      # 6. إعداد Java
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      # 7. إعداد Android SDK
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      # 8. الدخول لمجلد android
       - name: Build APK
         run: |
           cd android
           chmod +x gradlew
           ./gradlew assembleRelease
 
+      # 9. رفع الملف
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: doola-cord-release-apk
+          name: app-release
           path: android/app/build/outputs/apk/release/*.apk
