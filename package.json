@@ -3,14 +3,13 @@
   "version": "1.0.0",
   "description": "تطبيق تسجيل مكالمات احترافي - Doola Cord",
   "main": "index.js",
-  "scripts": {
-    "dev": "expo start",
-    "android": "expo run:android",
-    "ios": "expo run:ios",
-    "web": "expo start --web",
-    "bulid": "eas build",
-    "test": "jest"
-  },
+ "scripts": {
+  "start": "expo start",
+  "android": "expo run:android",
+  "ios": "expo run:ios",
+  "web": "expo start --web",
+  "test": "jest"
+}
   "keywords": [
     "call",
     "recorder",
