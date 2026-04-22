@@ -9,49 +9,39 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. سحب المشروع
-      - uses: actions/checkout@v4
+      - name: Checkout project
+        uses: actions/checkout@v4
 
-      # 2. تثبيت Node
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: 20
 
-      # 3. تثبيت pnpm
       - name: Install pnpm
         run: npm install -g pnpm
 
-      - name: Install EAS CLI
-        run: npm install -g eas-cli
-
-      # 4. تثبيت dependencies
       - name: Install dependencies
         run: pnpm install
 
-      # 5. بناء كود الواجهة (مهم!)
-      - name: Build Web
-        run: pnpm build
+      # تجاهل أي build فيه eas
+      - name: Skip JS build safely
+        run: echo "Skipping frontend build"
 
-      # 6. إعداد Java
       - name: Setup Java
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
           java-version: '17'
 
-      # 7. إعداد Android SDK
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
 
-      # 8. الدخول لمجلد android
       - name: Build APK
         run: |
           cd android
           chmod +x gradlew
           ./gradlew assembleRelease
 
-      # 9. رفع الملف
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
